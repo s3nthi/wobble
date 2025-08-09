@@ -1,0 +1,56 @@
+# FRONTEND
+# build output
+dist/
+# generated types
+.astro/
+
+# dependencies
+node_modules/
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+
+# environment variables
+.env
+.env.production
+
+# macOS-specific files
+.DS_Store
+
+# jetbrains setting folder
+.idea/
+
+# BACKEND
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+*.egg
+*.egg-info/
+dist/
+build/
+pip-wheel-metadata/
+
+# RL
+# TensorFlow / model artifacts
+*.h5
+*.pb
+*.ckpt
+checkpoint/
+saved_model/
+models/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints
+
+.vscode
