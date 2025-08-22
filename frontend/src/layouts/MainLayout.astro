@@ -1,0 +1,33 @@
+---
+import "../styles/global.css";
+const { title } = Astro.props;
+
+import NavBar from "../components/NavBar.astro";
+import Footer from "../components/Footer.astro";
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+
+    <script is:inline>
+      (function () {
+        const savedTheme = localStorage.getItem("theme") || "default";
+        document.documentElement.setAttribute("data-theme", savedTheme);
+      })();
+    </script>
+
+    <link rel="stylesheet" href="/src/styles/global.css" />
+  </head>
+  <body>
+    <NavBar />
+    <main class="w-[80vw] my-2 max-w-4xl mx-auto min-h-screen p-8">
+      <slot class="w-full" />
+    </main>
+    <Footer />
+  </body>
+</html>

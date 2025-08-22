@@ -1,0 +1,24 @@
+---
+const TITLE = ["W", "O", "B", "B", "L", "E"];
+const TITLECOLORS = [
+  "var(--color-acc-green)",
+  "var(--color-acc-green)",
+  "var(--color-acc-grey)",
+  "var(--color-acc-grey)",
+  "var(--color-acc-green)",
+  "var(--color-acc-green)",
+];
+---
+
+<div class="flex gap-0.5">
+  {
+    TITLE.map((char, i) => (
+      <span
+        style={`background-color: ${TITLECOLORS[i]}`}
+        class="flex px-1 w-[2ch] selection:bg-transparent h-[2ch] text-center justify-center items-center font-black text-[#fff]"
+      >
+        {char}
+      </span>
+    ))
+  }
+</div>

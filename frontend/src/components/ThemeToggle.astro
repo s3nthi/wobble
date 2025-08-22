@@ -1,0 +1,81 @@
+---
+import "../styles/global.css";
+---
+
+<button
+  id="theme-toggle-btn"
+  class="flex items-center gap-0 cursor-pointer"
+  type="button"
+  aria-label="Toggle theme"
+>
+  <span id="theme-icon-sun" style="display: none;" class="text-ter-fg"
+    ><svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.5"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      class="group-hover:stroke-black group-hover:dark:stroke-white transition-colors duration-300 ease-in-out"
+      style="--darkreader-inline-stroke: currentColor;"
+      data-darkreader-inline-stroke=""
+    >
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg></span
+  >
+  <span id="theme-icon-moon" style="display: none;" class="text-ter-fg"
+    ><svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.5"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      class="group-hover:stroke-black group-hover:dark:stroke-white transition-colors duration-300 ease-in-out"
+      style="--darkreader-inline-stroke: currentColor;"
+      data-darkreader-inline-stroke=""
+    >
+      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+    </svg></span
+  >
+</button>
+
+<script type="module">
+  const savedTheme = localStorage.getItem("theme") || "default";
+  const sunIcon = document.getElementById("theme-icon-sun");
+  const moonIcon = document.getElementById("theme-icon-moon");
+
+  function showIcons(theme) {
+    if (theme === "dark") {
+      sunIcon.style.display = "none";
+      moonIcon.style.display = "inline";
+    } else {
+      sunIcon.style.display = "inline";
+      moonIcon.style.display = "none";
+    }
+  }
+
+  showIcons(savedTheme);
+
+  document.getElementById("theme-toggle-btn").addEventListener("click", () => {
+    const currentTheme = localStorage.getItem("theme") || "default";
+    const newTheme = currentTheme === "dark" ? "default" : "dark";
+    localStorage.setItem("theme", newTheme);
+    document.documentElement.setAttribute("data-theme", newTheme);
+    showIcons(newTheme);
+  });
+</script>

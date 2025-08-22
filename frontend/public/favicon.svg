@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg width="800px" height="800px" viewBox="0 0 24 24" data-name="025_SCIENCE" id="_025_SCIENCE" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>.cls-1{fill:#333;}</style>
+  </defs>
+  <rect style="stroke: rgb(0, 0, 0); fill: rgb(83, 141, 78); stroke-width: 0px;" x="-0.024" width="24" height="24" rx="4" ry="4"/>
+  <g style="" transform="matrix(1.047279, 0, 0, 1.047279, -0.567348, 3.727612)">
+    <path class="cls-1" d="M16,13H8a3,3,0,0,1-3-3V6A3,3,0,0,1,8,3h8a3,3,0,0,1,3,3v4A3,3,0,0,1,16,13ZM8,5A1,1,0,0,0,7,6v4a1,1,0,0,0,1,1h8a1,1,0,0,0,1-1V6a1,1,0,0,0-1-1Z" style="fill: rgb(255, 255, 255);"/>
+    <path class="cls-1" d="M10,9a1.05,1.05,0,0,1-.71-.29A1,1,0,0,1,10.19,7a.6.6,0,0,1,.19.06.56.56,0,0,1,.17.09l.16.12A1,1,0,0,1,10,9Z" style="fill: rgb(255, 255, 255);"/>
+    <path class="cls-1" d="M14,9a1,1,0,0,1-.71-1.71,1,1,0,0,1,1.42,1.42,1,1,0,0,1-.16.12.56.56,0,0,1-.17.09.6.6,0,0,1-.19.06Z" style="fill: rgb(255, 255, 255);"/>
+    <path class="cls-1" d="M12,4a1,1,0,0,1-1-1V2a1,1,0,0,1,2,0V3A1,1,0,0,1,12,4Z" style="fill: rgb(255, 255, 255);"/>
+  </g>
+</svg>
