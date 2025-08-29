@@ -57,8 +57,9 @@ def train_model():
             print(f"Episode {episode}: avg reward={avg_reward:.2f}, win rate={win_rate:.1f}%")
             total_reward, wins = 0, 0
 
-    with open("backend/app/models/q_table.pkl","wb") as f:
-        pickle.dump(dict(Q), f)
+    os.makedirs("app/models", exist_ok=True)
+    with open("app/models/q_table.pkl", "wb") as f:
+        pickle.dump(q_table, f)
 
     print("Training complete. Q-table saved to backend/app/models/q_table.pkl")
 
