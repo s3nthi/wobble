@@ -19,7 +19,7 @@ data/      - Word lists
 
 ## How It Works
 
-1. The backend trains an RL agent to guess words based on feedback similar to Wordle™.
+1. The backend trains a Q-Learning agent to guess words based on feedback similar to Wordle™.
 2. The trained model serves predictions via a REST API.
 3. The frontend lets users play or get suggestions from the bot.
 
