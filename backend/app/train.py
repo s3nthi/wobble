@@ -1,4 +1,7 @@
-import random, pickle, json
+import os
+import random
+import pickle
+import json
 from collections import defaultdict
 from .env import WordleEnv
 from .strategies import pick_word, ACTIONS, init_strategies
@@ -7,21 +10,24 @@ alpha, gamma = 0.02, 0.05
 epsilon = 0.3
 
 def train_model():
-    with open("backend/app/data/train_words.json") as f:
+    BASE_DIR = os.path.dirname(__file__)
+    DATA_DIR = os.path.join(BASE_DIR, "data")
+
+    with open(os.path.join(DATA_DIR, "train_words.json")) as f:
         train_words = json.load(f)
-    with open("backend/app/data/possible_words.json") as f:
+    with open(os.path.join(DATA_DIR, "possible_words.json")) as f:
         all_words = json.load(f)
 
     init_strategies(train_words)
 
-    Q = defaultdict(lambda: [0.0]*len(ACTIONS))
+    Q = defaultdict(lambda: [0.0] * len(ACTIONS))
     env = WordleEnv(train_words, all_words)
 
     episodes = 10000
     print_every = 100
     total_reward, wins = 0, 0
 
-    for episode in range(1, episodes+1):
+    for episode in range(1, episodes + 1):
         (g_last, y_last), constraints = env.reset()
         remaining = set(all_words)
         step_idx, done = 0, False
@@ -41,7 +47,9 @@ def train_model():
             g_next, y_next = next_counts
             s_next = (g_next, y_next)
 
-            Q[s][a_idx] += alpha * (reward + (0 if done else gamma*max(Q[s_next])) - Q[s][a_idx])
+            Q[s][a_idx] += alpha * (
+                reward + (0 if done else gamma * max(Q[s_next])) - Q[s][a_idx]
+            )
 
             g_last, y_last = g_next, y_next
             step_idx += 1
@@ -54,14 +62,20 @@ def train_model():
         if episode % print_every == 0:
             avg_reward = total_reward / print_every
             win_rate = wins / print_every * 100
-            print(f"Episode {episode}: avg reward={avg_reward:.2f}, win rate={win_rate:.1f}%")
+            print(
+                f"Episode {episode}: avg reward={avg_reward:.2f}, win rate={win_rate:.1f}%"
+            )
             total_reward, wins = 0, 0
 
-    os.makedirs("app/models", exist_ok=True)
-    with open("app/models/q_table.pkl", "wb") as f:
-        pickle.dump(q_table, f)
+    # Save model
+    models_dir = os.path.join(BASE_DIR, "models")
+    os.makedirs(models_dir, exist_ok=True)
 
-    print("Training complete. Q-table saved to backend/app/models/q_table.pkl")
+    model_path = os.path.join(models_dir, "q_table.pkl")
+    with open(model_path, "wb") as f:
+        pickle.dump(dict(Q), f)
+
+    print(f"Training complete. Q-table saved to {model_path}")
 
 
 if __name__ == "__main__":
