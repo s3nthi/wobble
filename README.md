@@ -15,8 +15,6 @@ models/    - Saved Q-learning models (Q-table)
 data/      - Word lists used for training and guessing  
 ```
 
----
-
 ## How It Works
 
 Wobble is powered by a reinforcement learning agent trained to solve Wordle-like puzzles using a simplified Q-learning algorithm.
@@ -44,7 +42,6 @@ Wobble is powered by a reinforcement learning agent trained to solve Wordle-like
 - `POST /step`: Submit a user's guess and get feedback.
 - `POST /bot-move`: Request the bot to make the next guess using the learned Q-values and current constraints.
 
----
 
 ### Frontend – Astro Web Interface
 
@@ -54,7 +51,6 @@ Wobble is powered by a reinforcement learning agent trained to solve Wordle-like
   - Let the bot take over and observe its strategy in action.
 - The interface communicates with the FastAPI backend to manage game state and display feedback in real time.
 
----
 
 ## Installation
 
@@ -79,7 +75,6 @@ npm install
 npm run dev
 ```
 
----
 
 ## Training the Agent
 
@@ -92,7 +87,6 @@ python app/train.py
 
 This will train the agent using custom word lists and save the Q-table to `models/q_table.pkl`.
 
----
 
 ## API Usage (Example)
 
@@ -129,7 +123,6 @@ Then use an API tool (like Postman or cURL):
   }
   ```
 
----
 
 **Note:**
 
