@@ -1,11 +1,11 @@
 <div align="center">
 <h1>Wobble – RL Wordle™ Solver</h1>
 </div>
+Wobble is a Reinforcement Learning project that trains an agent to play Wordle™. It includes:
 
-Wobble is a Reinforcement Learning project that trains an agent to play Wordle™.
 It includes:
 
-* **Backend**: TensorFlow RL agent + FastAPI API.
+* **Backend**: Q-learning RL agent + FastAPI API.
 * **Frontend**: Astro web UI for testing the bot in your browser.
 
 ## Project Structure
@@ -13,7 +13,7 @@ It includes:
 ```
 backend/   - Environment, RL agent, API server
 frontend/  - Astro-based web interface
-models/    - Saved TensorFlow models
+models/    - Saved Q-learing models (Q table)
 data/      - Word lists
 ```
 
