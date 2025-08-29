@@ -5,7 +5,7 @@ Wobble is a Reinforcement Learning project that trains an agent to play Wordleâ„
 
 It includes:
 
-* **Backend**: Q-learning RL agent + FastAPI API.
+* **Backend**: Q-learning RL agent + FastAPI.
 * **Frontend**: Astro web UI for testing the bot in your browser.
 
 ## Project Structure
@@ -20,7 +20,7 @@ data/      - Word lists
 ## How It Works
 
 1. The backend trains a Q-Learning agent to guess words based on feedback similar to Wordleâ„¢.
-2. The trained model serves predictions via a REST API.
+2. The trained model serves predictions via a Fast API.
 3. The frontend lets users play or get suggestions from the bot.
 
 **Note:**
