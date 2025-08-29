@@ -3,16 +3,16 @@
 </div>
 Wobble is a Reinforcement Learning project that trains an agent to play Wordle™. It includes:
 
-- **Backend**: Q-learning agent + FastAPI REST API  
-- **Frontend**: Astro-based web interface to interact with the bot  
+- **Backend**: Q-learning agent + FastAPI REST API
+- **Frontend**: Astro-based web interface to interact with the bot
 
 ## Project Structure
 
 ```
-backend/   - Environment, Q-learning agent, API server  
-frontend/  - Astro-based web interface  
-models/    - Saved Q-learning models (Q-table)  
-data/      - Word lists used for training and guessing  
+backend/   - Environment, Q-learning agent, API server
+frontend/  - Astro-based web interface
+models/    - Saved Q-learning models (Q-table)
+data/      - Word lists used for training and guessing
 ```
 
 ## How It Works
@@ -93,7 +93,7 @@ This will train the agent using custom word lists and save the Q-table to `model
 Start the backend server:
 
 ```bash
-uvicorn app.main:app --reload
+uvicorn app.api:api --reload
 ```
 
 Then use an API tool (like Postman or cURL):

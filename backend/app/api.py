@@ -1,17 +1,22 @@
+import os
 from fastapi import FastAPI
 from pydantic import BaseModel
 import pickle, json, random
 from .env import WordleEnv
 from .strategies import pick_word, ACTIONS, init_strategies
 
-with open("backend/app/data/train_words.json") as f:
+BASE_DIR = os.path.dirname(__file__)
+DATA_DIR = os.path.join(BASE_DIR, "data")
+
+with open(os.path.join(DATA_DIR, "train_words.json")) as f:
     train_words = json.load(f)
-with open("backend/app/data/possible_words.json") as f:
+with open(os.path.join(DATA_DIR, "possible_words.json")) as f:
     all_words = json.load(f)
 
 init_strategies(train_words)
 
-with open("backend/app/models/q_table.pkl","rb") as f:
+MODEL_DIR = os.path.join(BASE_DIR, "models")
+with open(os.path.join(MODEL_DIR, "q_table.pkl"),"rb") as f:
     Q = pickle.load(f)
 
 app = FastAPI()

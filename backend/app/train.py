@@ -2,12 +2,16 @@ import os
 import random
 import pickle
 import json
+from tqdm import trange
 from collections import defaultdict
 from .env import WordleEnv
 from .strategies import pick_word, ACTIONS, init_strategies
 
-alpha, gamma = 0.02, 0.05
-epsilon = 0.3
+alpha = 0.05
+gamma = 0.9
+epsilon = 0.5
+epsilon_min = 0.05
+epsilon_decay = 0.9995
 
 def train_model():
     BASE_DIR = os.path.dirname(__file__)
@@ -27,7 +31,10 @@ def train_model():
     print_every = 100
     total_reward, wins = 0, 0
 
-    for episode in range(1, episodes + 1):
+    global epsilon
+
+    progress = trange(1, episodes + 1, desc="Training", unit="ep")
+    for episode in progress:
         (g_last, y_last), constraints = env.reset()
         remaining = set(all_words)
         step_idx, done = 0, False
@@ -35,10 +42,12 @@ def train_model():
 
         while not done:
             s = (g_last, y_last)
+            
             if random.random() < epsilon:
                 a_idx = random.randrange(len(ACTIONS))
             else:
                 a_idx = max(range(len(ACTIONS)), key=lambda i: Q[s][i])
+            
             action = ACTIONS[a_idx]
             guess = pick_word(action, step_idx, remaining, constraints)
             remaining.discard(guess)
@@ -46,6 +55,10 @@ def train_model():
             (next_counts, next_constraints), reward, done, _ = env.step(guess)
             g_next, y_next = next_counts
             s_next = (g_next, y_next)
+
+            reward -= 0.1
+            if guess == env.secret:
+                reward += 10
 
             Q[s][a_idx] += alpha * (
                 reward + (0 if done else gamma * max(Q[s_next])) - Q[s][a_idx]
@@ -59,15 +72,17 @@ def train_model():
         if guess == env.secret:
             wins += 1
 
+        epsilon = max(epsilon_min, epsilon * epsilon_decay)
+        
         if episode % print_every == 0:
-            avg_reward = total_reward / print_every
-            win_rate = wins / print_every * 100
-            print(
-                f"Episode {episode}: avg reward={avg_reward:.2f}, win rate={win_rate:.1f}%"
-            )
-            total_reward, wins = 0, 0
+                avg_reward = total_reward / print_every
+                win_rate = wins / print_every * 100
+                progress.set_description(
+                    f"Ep {episode}, win%={win_rate:.1f}, eps={epsilon:.2f}"
+                )
+                total_reward, wins = 0, 0
 
-    # Save model
+
     models_dir = os.path.join(BASE_DIR, "models")
     os.makedirs(models_dir, exist_ok=True)
 
