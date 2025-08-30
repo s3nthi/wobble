@@ -19,11 +19,11 @@ import MainLayout from "../layouts/MainLayout.astro";
 
     <p>The backend trains a Q-learning agent to guess 5-letter words based on feedback similar to Wordle™.</p>
 
-    <p>The agent interacts with a custom environment (<code>WordleEnv</code>) where:</p>
+    <p>The agent interacts with a custom environment (<code>WordleEnv</code>) where:<br><br></p>
     <ul>
-      <li><strong>State:</strong> A tuple representing feedback from the previous guess — the number of correct letters in the correct position (greens) and correct letters in the wrong position (yellows).</li>
-      <li><strong>Actions:</strong> A set of predefined word-picking strategies (e.g. frequency-based, position-based, constraint-filtered).</li>
-      <li><strong>Reward:</strong> Positive points for accurate guesses (greens/yellows), a bonus for solving the word, and penalties for failure after 6 attempts.</li>
+      <li><strong>State:</strong> A tuple representing feedback from the previous guess — the number of correct letters in the correct position (greens) and correct letters in the wrong position (yellows).</li><br>
+      <li><strong>Actions:</strong> A set of predefined word-picking strategies (e.g. frequency-based, position-based, constraint-filtered).</li><br>
+      <li><strong>Reward:</strong> Positive points for accurate guesses (greens/yellows), a bonus for solving the word, and penalties for failure after 6 attempts.</li><br>
     </ul>
 
     <p>The agent is trained over thousands of episodes, updating its Q-table using the Q-learning formula:</p>
