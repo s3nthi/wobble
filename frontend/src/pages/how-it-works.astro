@@ -42,26 +42,24 @@ import MainLayout from "../layouts/MainLayout.astro";
         </p>
 
         <code>
-            Q[s][a] ← Q[s][a] + &alpha; * (reward + &gamma; * max(Q[s&rsquo;]) - Q[s][a]))
+            Q[s][a] ← Q[s][a] + &alpha; * (reward + &gamma; * max(Q[s&rsquo;]) -
+            Q[s][a]))
         </code>
 
-        <p>
-            Here:
-            <ul>
-                <li>
-                    <strong>&alpha;</strong> is the learning rate (how much new info
-                    overrides old).
-                </li>
-                <li>
-                    <strong>&gamma;</strong> is the discount factor (importance of
-                    future rewards).
-                </li>
-                <li>
-                    <strong>max(Q[s&rsquo;])</strong> is the best future value from
-                    the next state.
-                </li>
-            </ul>
-        </p>
+        <ul style="list-style-type: none; text-align: center;">
+            <li>
+                <strong>&alpha;</strong> is the learning rate (how much new info
+                overrides old).
+            </li>
+            <li>
+                <strong>&gamma;</strong> is the discount factor (importance of future
+                rewards).
+            </li>
+            <li>
+                <strong>max(Q[s&rsquo;])</strong> is the best future value from the
+                next state.
+            </li>
+        </ul>
 
         <h2>Training</h2>
 
@@ -104,9 +102,11 @@ import MainLayout from "../layouts/MainLayout.astro";
 </MainLayout>
 
 <style>
-  li {
-    margin-bottom: 15px;
-    list-style-type: circle;
-    margin-left: 35px;
-  }
+    li {
+        margin-bottom: 15px;
+        margin-left: 35px;
+    }
+    ul {
+        list-style-type: circle;
+    }
 </style>
