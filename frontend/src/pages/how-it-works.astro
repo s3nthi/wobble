@@ -3,6 +3,115 @@ import MainLayout from "../layouts/MainLayout.astro";
 ---
 
 <MainLayout title="How It Works? - Wobble">
-  <h1>How does Wobble work?</h1>
-  <p class="text-center">TODO: methodology of the model</p>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>How It Works - Wobble</title>
+  <link rel="stylesheet" href="../styles/global.css" />
+</head>
+<body>
+  <main>
+    <h1>How It Works</h1>
+
+    <p><strong>Wobble</strong> is powered by a reinforcement learning agent trained to solve Wordle-like puzzles using a simplified Q-learning algorithm.</p>
+
+    <h2>Backend – Q-Learning Agent + API</h2>
+
+    <p>The backend trains a Q-learning agent to guess 5-letter words based on feedback similar to Wordle™.</p>
+
+    <p>The agent interacts with a custom environment (<code>WordleEnv</code>) where:</p>
+    <ul>
+      <li><strong>State:</strong> A tuple representing feedback from the previous guess — the number of correct letters in the correct position (greens) and correct letters in the wrong position (yellows).</li>
+      <li><strong>Actions:</strong> A set of predefined word-picking strategies (e.g. frequency-based, position-based, constraint-filtered).</li>
+      <li><strong>Reward:</strong> Positive points for accurate guesses (greens/yellows), a bonus for solving the word, and penalties for failure after 6 attempts.</li>
+    </ul>
+
+    <p>The agent is trained over thousands of episodes, updating its Q-table using the Q-learning formula:</p>
+    <pre><code>Q[s][a] ← Q[s][a] + α * (reward + γ * max(Q[s’]) − Q[s][a])</code></pre>
+
+    <p><strong>Once training is complete:</strong></p>
+    <ul>
+      <li>The Q-table is saved to <code>models/q_table.pkl</code>.</li>
+      <li>A FastAPI app serves this model via a REST API.</li>
+    </ul>
+
+    <h3>API Capabilities</h3>
+    <ul>
+      <li><code>POST /start</code>: Start a new game with an optional secret word.</li>
+      <li><code>POST /step</code>: Submit a user's guess and get feedback.</li>
+      <li><code>POST /bot-move</code>: Request the bot to make the next guess using the learned Q-values and current constraints.</li>
+    </ul>
+
+    <h2>Frontend – Astro Web Interface</h2>
+    <ul>
+      <li>The frontend is built with Astro, offering an interactive Wordle-style UI.</li>
+      <li>Users can:
+        <ul>
+          <li>Play the game manually by entering guesses.</li>
+          <li>Let the bot take over and observe its strategy in action.</li>
+        </ul>
+      </li>
+      <li>The interface communicates with the FastAPI backend to manage game state and display feedback in real time.</li>
+    </ul>
+
+    <h2>Installation</h2>
+    <h3>Requirements:</h3>
+    <ul>
+      <li>Python 3.10+</li>
+      <li>Node.js (for frontend)</li>
+    </ul>
+
+    <h3>Backend Setup</h3>
+    <pre><code>cd backend
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+pip install -r requirements.txt</code></pre>
+
+    <h3>Frontend Setup</h3>
+    <pre><code>cd frontend
+npm install
+npm run dev</code></pre>
+
+    <h3>Training the Agent</h3>
+    <p>To train the Q-learning agent from scratch:</p>
+    <pre><code>cd backend
+python app/train.py</code></pre>
+    <p>This will train the agent using custom word lists and save the Q-table to <code>models/q_table.pkl</code>.</p>
+
+    <h3>API Usage (Example)</h3>
+
+    <p><strong>Start the backend server:</strong></p>
+    <pre><code>uvicorn app.api:api --reload</code></pre>
+
+    <p><strong>Then use an API tool (like Postman or cURL):</strong></p>
+
+    <p><strong>Start a game:</strong></p>
+    <pre><code>POST /start
+{
+  "secret": "crane"  // optional
+}</code></pre>
+
+    <p><strong>Submit a guess:</strong></p>
+    <pre><code>POST /step
+{
+  "game_id": "1234",
+  "guess": "slate"
+}</code></pre>
+
+    <p><strong>Bot makes a move:</strong></p>
+    <pre><code>POST /bot-move
+{
+  "game_id": "1234"
+}</code></pre>
+
+    <h3>Note:</h3>
+    <ul>
+      <li>No official Wordle™ code, data, or other resources are used.</li>
+      <li>All training is done locally with custom word lists and environments.</li>
+    </ul>
+
+    <p><em>Wordle is a trademark of The New York Times Company. This project is not affiliated with or endorsed by The New York Times Company.</em></p>
+  </main>
+</body>
+</html>
 </MainLayout>
