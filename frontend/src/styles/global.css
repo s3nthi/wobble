@@ -38,10 +38,18 @@
   }
 
   h2 {
-    @apply text-2xl font-semibold mt-8 mb-3;
+    @apply text-2xl font-semibold mt-8 mb-3 text-center w-full md:text-left;
   }
 
   a {
     @apply hover:underline;
+  }
+
+  code {
+    @apply bg-[#111] text-white text-sm p-2 block max-w-[80%] w-fit rounded my-4 mx-auto dark:border border-ter-fg/20;
+  }
+
+  h3 {
+    @apply my-2 text-center w-full md:text-left;
   }
 }

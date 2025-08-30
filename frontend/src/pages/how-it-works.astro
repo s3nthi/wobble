@@ -2,116 +2,111 @@
 import MainLayout from "../layouts/MainLayout.astro";
 ---
 
-<MainLayout title="How It Works? - Wobble">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>How It Works - Wobble</title>
-  <link rel="stylesheet" href="../styles/global.css" />
-</head>
-<body>
-  <main>
-    <h1>How It Works</h1>
+<MainLayout title="How It Works – Wobble">
+    <main class="prose prose-invert max-w-none">
+        <h1>How It Works</h1>
 
-    <p><strong>Wobble</strong> is powered by a reinforcement learning agent trained to solve Wordle-like puzzles using a simplified Q-learning algorithm.</p>
+        <p>
+            <strong>Wobble</strong> is powered by a reinforcement learning agent
+            trained to solve Wordle-like puzzles using a simplified Q-learning algorithm.
+        </p>
 
-    <h2>Backend – Q-Learning Agent + API</h2>
+        <h2>The Learning Process</h2>
 
-    <p>The backend trains a Q-learning agent to guess 5-letter words based on feedback similar to Wordle™.</p>
+        <p>
+            The agent plays Wordle-style games repeatedly, learning from trial
+            and error. Each game is an <em>episode</em>, and after thousands of
+            episodes the model improves its ability to pick strong guesses.
+        </p>
 
-    <p>The agent interacts with a custom environment (<code>WordleEnv</code>) where:</p>
-    <ul>
-      <li><strong>State:</strong> A tuple representing feedback from the previous guess — the number of correct letters in the correct position (greens) and correct letters in the wrong position (yellows).</li>
-      <li><strong>Actions:</strong> A set of predefined word-picking strategies (e.g. frequency-based, position-based, constraint-filtered).</li>
-      <li><strong>Reward:</strong> Positive points for accurate guesses (greens/yellows), a bonus for solving the word, and penalties for failure after 6 attempts.</li>
-    </ul>
-
-    <p>The agent is trained over thousands of episodes, updating its Q-table using the Q-learning formula:</p>
-    <pre><code>Q[s][a] ← Q[s][a] + α * (reward + γ * max(Q[s’]) − Q[s][a])</code></pre>
-
-    <p><strong>Once training is complete:</strong></p>
-    <ul>
-      <li>The Q-table is saved to <code>models/q_table.pkl</code>.</li>
-      <li>A FastAPI app serves this model via a REST API.</li>
-    </ul>
-
-    <h3>API Capabilities</h3>
-    <ul>
-      <li><code>POST /start</code>: Start a new game with an optional secret word.</li>
-      <li><code>POST /step</code>: Submit a user's guess and get feedback.</li>
-      <li><code>POST /bot-move</code>: Request the bot to make the next guess using the learned Q-values and current constraints.</li>
-    </ul>
-
-    <h2>Frontend – Astro Web Interface</h2>
-    <ul>
-      <li>The frontend is built with Astro, offering an interactive Wordle-style UI.</li>
-      <li>Users can:
         <ul>
-          <li>Play the game manually by entering guesses.</li>
-          <li>Let the bot take over and observe its strategy in action.</li>
+            <li>
+                <strong>State:</strong> After each guess, the environment provides
+                feedback — how many letters are correct and in the right position
+                (greens), and how many letters are correct but misplaced (yellows).
+            </li>
+            <li>
+                <strong>Actions:</strong> The agent chooses a word to guess. Over
+                time it learns which guesses lead to better outcomes.
+            </li>
+            <li>
+                <strong>Reward:</strong> The agent receives positive points for getting
+                greens and yellows, a large bonus for solving the word, and a penalty
+                if it fails within 6 tries.
+            </li>
         </ul>
-      </li>
-      <li>The interface communicates with the FastAPI backend to manage game state and display feedback in real time.</li>
-    </ul>
 
-    <h2>Installation</h2>
-    <h3>Requirements:</h3>
-    <ul>
-      <li>Python 3.10+</li>
-      <li>Node.js (for frontend)</li>
-    </ul>
+        <p>
+            Learning is done using the Q-learning update rule, which adjusts the
+            value of each state–action pair:
+        </p>
 
-    <h3>Backend Setup</h3>
-    <pre><code>cd backend
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-pip install -r requirements.txt</code></pre>
+        <code>
+            Q[s][a] ← Q[s][a] + &alpha; * (reward + &gamma; * max(Q[s&rsquo;]) - Q[s][a])
+        </code>
 
-    <h3>Frontend Setup</h3>
-    <pre><code>cd frontend
-npm install
-npm run dev</code></pre>
+        <p>
+            Here:
+            <ul>
+                <li>
+                    <strong>&alpha;</strong> is the learning rate (how much new info
+                    overrides old).
+                </li>
+                <li>
+                    <strong>&gamma;</strong> is the discount factor (importance of
+                    future rewards).
+                </li>
+                <li>
+                    <strong>max(Q[s&rsquo;])</strong> is the best future value from
+                    the next state.
+                </li>
+            </ul>
+        </p>
 
-    <h3>Training the Agent</h3>
-    <p>To train the Q-learning agent from scratch:</p>
-    <pre><code>cd backend
-python app/train.py</code></pre>
-    <p>This will train the agent using custom word lists and save the Q-table to <code>models/q_table.pkl</code>.</p>
+        <h2>Training</h2>
 
-    <h3>API Usage (Example)</h3>
+        <p>
+            The agent is trained by playing against a large set of possible
+            words. Over time, it learns which strategies increase the chance of
+            solving the puzzle within the allowed attempts. The results of
+            training are stored in a Q-table, which the bot then uses to make
+            informed decisions during play.
+        </p>
 
-    <p><strong>Start the backend server:</strong></p>
-    <pre><code>uvicorn app.api:api --reload</code></pre>
+        <h2>Outcome</h2>
+        <p>
+            After training, the agent is able to approach Wordle systematically
+            — starting with informative guesses, narrowing down possibilities,
+            and converging on the correct word more efficiently than random
+            play.
+        </p>
 
-    <p><strong>Then use an API tool (like Postman or cURL):</strong></p>
-
-    <p><strong>Start a game:</strong></p>
-    <pre><code>POST /start
-&lbrace;
-  "secret": "crane"  // optional
-&rbrace;</code></pre>
-
-    <p><strong>Submit a guess:</strong></p>
-    <pre><code>POST /step
-&lbrace;
-  "game_id": "1234",
-  "guess": "slate"
-&rbrace;</code></pre>
-
-    <p><strong>Bot makes a move:</strong></p>
-    <pre><code>POST /bot-move
-&lbrace;
-  "game_id": "1234"
-&rbrace;</code></pre>
-
-    <h3>Note:</h3>
-    <ul>
-      <li>No official Wordle™ code, data, or other resources are used.</li>
-      <li>All training is done locally with custom word lists and environments.</li>
-    </ul>
-
-    <p><em>Wordle is a trademark of The New York Times Company. This project is not affiliated with or endorsed by The New York Times Company.</em></p>
-  </main>
-</body>
-</html>
+        <br />
+        <h3>Note:</h3>
+        <ul>
+            <li>
+                No official Wordle™ code, data, or other resources are used.
+            </li>
+            <li>
+                All training is done locally with custom word lists and
+                environments.
+            </li>
+        </ul>
+        <br />
+        <p>
+            <em
+                >Wordle is a trademark of The New York Times Company. This
+                project is not affiliated with or endorsed by The New York Times
+                Company.</em
+            >
+        </p>
+    </main>
 </MainLayout>
+
+<style>
+  li {
+    margin-bottom: 15px;
+    list-style-type: circle;
+    margin-left: 35px;
+  }
+</style>
