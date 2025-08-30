@@ -87,22 +87,22 @@ python app/train.py</code></pre>
 
     <p><strong>Start a game:</strong></p>
     <pre><code>POST /start
-\{
+&lbrace;
   "secret": "crane"  // optional
-}</code></pre>
+&rbrace;</code></pre>
 
     <p><strong>Submit a guess:</strong></p>
     <pre><code>POST /step
-\{
+&lbrace;
   "game_id": "1234",
   "guess": "slate"
-}</code></pre>
+&rbrace;</code></pre>
 
     <p><strong>Bot makes a move:</strong></p>
     <pre><code>POST /bot-move
-\{
+&lbrace;
   "game_id": "1234"
-}</code></pre>
+&rbrace;</code></pre>
 
     <h3>Note:</h3>
     <ul>
