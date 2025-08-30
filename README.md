@@ -9,10 +9,19 @@ Wobble is a Reinforcement Learning project that trains an agent to play Wordle�
 ## Project Structure
 
 ```
-backend/   - Environment, Q-learning agent, API server
-frontend/  - Astro-based web interface
-models/    - Saved Q-learning models (Q-table)
-data/      - Word lists used for training and guessing
+wobble
+│
+├──backend/                - Environment, Q-learning agent, API server
+│  └── app/
+│      ├── data/           - Saved Q-learning models (Q-table)
+│      └── models/         - Word lists used for training and guessing
+│
+└── frontend/              - Astro-based web interface
+    └── src
+        ├── components     - Reusable UI components
+        ├── layouts        - Shared page layouts
+        ├── pages          - Page-level views
+        └── styles         - Global and component styles
 ```
 
 ## How It Works
