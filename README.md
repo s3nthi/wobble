@@ -11,17 +11,17 @@ Wobble is a Reinforcement Learning project that trains an agent to play Wordle�
 ```
 wobble
 │
-├──backend/                - Environment, Q-learning agent, API server
+├── backend/                - Environment, Q-learning agent, API server
 │  └── app/
-│      ├── data/           - Saved Q-learning models (Q-table)
-│      └── models/         - Word lists used for training and guessing
+│      ├── data/            - Word lists used for training and guessing
+│      └── models/          - Saved Q-learning models (Q-table)
 │
-└── frontend/              - Astro-based web interface
+└── frontend/               - Astro-based web interface
     └── src
-        ├── components     - Reusable UI components
-        ├── layouts        - Shared page layouts
-        ├── pages          - Page-level views
-        └── styles         - Global and component styles
+        ├── components      - Reusable UI components
+        ├── layouts         - Shared page layouts
+        ├── pages           - Page-level views
+        └── styles          - Global and component styles
 ```
 
 ## How It Works
@@ -35,15 +35,30 @@ Wobble is powered by a reinforcement learning agent trained to solve Wordle-like
   - **State**: A tuple representing feedback from the previous guess — the number of correct letters in the correct position (**greens**) and correct letters in the wrong position (**yellows**).
   - **Actions**: A set of predefined word-picking strategies (e.g. frequency-based, position-based, constraint-filtered).
   - **Reward**: Positive points for accurate guesses (greens/yellows), a bonus for solving the word, and penalties for failure after 6 attempts.
-- The agent is trained over thousands of episodes, updating its **Q-table** using the Q-learning formula:
 
-  ```
-  Q[s][a] ← Q[s][a] + α * (reward + γ * max(Q[s’]) − Q[s][a])
-  ```
+#### Training Process
 
-- Once training is complete:
-  - The **Q-table** is saved to `models/q_table.pkl`.
-  - A **FastAPI** app serves this model via a REST API.
+Training runs as a loop of simulated Wordle games (episodes):
+
+1. **Initialize** – Load word lists, set up the environment (`WordleEnv`), initialize strategies, and start with an empty Q-table.
+2. **Episode Loop** – For each game:
+   - Reset the environment with a new secret word.
+   - At each step, the agent:
+     - Observes feedback (greens, yellows).
+     - Chooses an action (explore randomly with ε, or exploit the best-known action).
+     - Picks a guess word using the chosen strategy.
+     - Submits the guess to the environment.
+3. **Reward + Update** – The environment returns feedback and a reward.
+   The Q-value for the current state–action pair is updated using the Q-learning rule:
+
+$$
+Q(s, a) \leftarrow Q(s, a) + \alpha \cdot \Big( r + \gamma \cdot \max_{a'} Q(s', a') - Q(s, a) \Big)
+$$
+
+
+4. **Exploration Decay** – Over episodes, $\varepsilon$ decays so the agent explores less and exploits learned strategies more.
+5. **Progress Tracking** – Win rate and average rewards are logged every N episodes.
+6. **Model Saving** – After training completes, the Q-table is saved to `app/models/q_table.pkl` for later use by the API.
 
 #### API Capabilities
 
@@ -51,15 +66,13 @@ Wobble is powered by a reinforcement learning agent trained to solve Wordle-like
 - `POST /step`: Submit a user's guess and get feedback.
 - `POST /bot-move`: Request the bot to make the next guess using the learned Q-values and current constraints.
 
-
 ### Frontend – Astro Web Interface
 
 - The frontend is built with **Astro**, offering an interactive Wordle-style UI.
 - Users can:
-  - Play the game manually by entering guesses.
-  - Let the bot take over and observe its strategy in action.
+- Play the game manually by entering guesses.
+- Let the bot take over and observe its strategy in action.
 - The interface communicates with the FastAPI backend to manage game state and display feedback in real time.
-
 
 ## Installation
 
@@ -74,7 +87,7 @@ cd backend
 python -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
 pip install -r requirements.txt
-```
+````
 
 ### Frontend Setup
 
@@ -83,7 +96,6 @@ cd frontend
 npm install
 npm run dev
 ```
-
 
 ## Training the Agent
 
@@ -94,20 +106,20 @@ cd backend
 python app/train.py
 ```
 
-This will train the agent using custom word lists and save the Q-table to `models/q_table.pkl`.
-
+This will train the agent using custom word lists and save the Q-table to `app/models/q_table.pkl`.
 
 ## API Usage (Example)
 
 Start the backend server:
 
 ```bash
-uvicorn app.api:api --reload
+uvicorn app.api:app --reload
 ```
 
 Then use an API tool (like Postman or cURL):
 
-- **Start a game**:
+* **Start a game**:
+
   ```http
   POST /start
   {
@@ -115,7 +127,8 @@ Then use an API tool (like Postman or cURL):
   }
   ```
 
-- **Submit a guess**:
+* **Submit a guess**:
+
   ```http
   POST /step
   {
@@ -124,7 +137,8 @@ Then use an API tool (like Postman or cURL):
   }
   ```
 
-- **Bot makes a move**:
+* **Bot makes a move**:
+
   ```http
   POST /bot-move
   {
@@ -132,6 +146,7 @@ Then use an API tool (like Postman or cURL):
   }
   ```
 
+---
 
 **Note:**
 
