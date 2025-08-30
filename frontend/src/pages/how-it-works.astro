@@ -27,9 +27,9 @@ import MainLayout from "../layouts/MainLayout.astro";
     </ul>
 
     <p>The agent is trained over thousands of episodes, updating its Q-table using the Q-learning formula:</p>
-    <pre><code>Q[s][a] ← Q[s][a] + α * (reward + γ * max(Q[s’]) − Q[s][a])</code></pre>
+    <pre style="text-align: center;"><code>Q[s][a] ← Q[s][a] + α * (reward + γ * max(Q[s’]) − Q[s][a])</code></pre><br>
 
-    <p><strong>Once training is complete:</strong></p>
+    <p><strong>Once training is complete:</strong><br></p>
     <ul>
       <li>The Q-table is saved to <code>models/q_table.pkl</code>.</li>
       <li>A FastAPI app serves this model via a REST API.</li>
@@ -50,9 +50,10 @@ import MainLayout from "../layouts/MainLayout.astro";
           <li>Play the game manually by entering guesses.</li>
           <li>Let the bot take over and observe its strategy in action.</li>
         </ul>
-      </li>
+      </li><br>
       <li>The interface communicates with the FastAPI backend to manage game state and display feedback in real time.</li>
     </ul>
+
 
     <h2>Installation</h2>
     <h3>Requirements:</h3>
