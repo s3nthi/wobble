@@ -103,7 +103,7 @@ export default function ModeSwitcher() {
                 </label>
             </div>
 
-            <div id="mode-content" className="my-10">
+            <div id="mode-content" className="py-10">
                 {mode === "play" && <PlayAgainstMode />}
                 {mode === "test" && <TestBotMode />}
             </div>
@@ -362,12 +362,12 @@ function PlayAgainstMode() {
                         </div>
                     )}
                     <div className="flex flex-col items-center gap-4">
-                        {renderBoard(userBoard, currentRow)}
                         <h3 className="font-bold text-2xl text-center">You</h3>
+                        {renderBoard(userBoard, currentRow)}
                     </div>
                     <div className="flex flex-col items-center gap-4">
-                        {renderBoard(botBoard, undefined, true)}
                         <h3 className="font-bold text-2xl text-center">Bot</h3>
+                        {renderBoard(botBoard, undefined, true)}
                     </div>
                 </div>
             )}
