@@ -1,61 +1,83 @@
 @import "tailwindcss";
 
 @theme {
-  --color-bg: #fff;
-  --color-sec-bg: #ddd;
-  --color-ter-bg: #bbb;
+    --color-bg: #fff;
+    --color-sec-bg: #ddd;
+    --color-ter-bg: #bbb;
 
-  --color-fg: #111;
-  --color-sec-fg: #000;
-  --color-ter-fg: #666;
+    --color-fg: #111;
+    --color-sec-fg: #000;
+    --color-ter-fg: #666;
 
-  --color-acc-green: #538d4e;
-  --color-acc-grey: #3a3a3c;
-  --color-acc-yellow: #b59f3b;
+    --color-cell-border: #d3d6da;
 
-  --font-sans: "Atkinson Hyperlegible", Arial, Helvetica, sans-serif;
+    --color-acc-green: #538d4e;
+    --color-acc-grey: #787c7e;
+    --color-acc-yellow: #b59f3b;
+
+    --font-sans: "Atkinson Hyperlegible", Arial, Helvetica, sans-serif;
 }
 
 [data-theme="dark"] {
-  --color-bg: #101010;
-  --color-sec-bg: #202020;
-  --color-ter-bg: #303030;
+    --color-bg: #101010;
+    --color-sec-bg: #202020;
+    --color-ter-bg: #303030;
 
-  --color-fg: #eee;
-  --color-sec-fg: #fff;
-  --color-ter-fg: #aaa;
+    --color-fg: #eee;
+    --color-sec-fg: #fff;
+    --color-ter-fg: #aaa;
+
+    --color-acc-grey: #3a3a3c;
+
+    --color-cell-border: #3a3a3c;
 }
 
 @layer base {
-  body {
-    @apply bg-bg text-fg font-sans;
-  }
+    body {
+        @apply bg-bg text-fg font-sans;
+    }
 
-  ::selection {
-    @apply bg-acc-green text-white;
-  }
+    ::selection {
+        @apply bg-acc-green text-white;
+    }
 
-  h1 {
-    @apply text-4xl font-black text-center mt-8 mb-3;
-  }
+    h1 {
+        @apply text-4xl font-black text-center mt-8 mb-3;
+    }
 
-  h2 {
-    @apply text-2xl font-semibold mt-8 mb-3 text-center w-full md:text-left;
-  }
+    h2 {
+        @apply text-2xl font-semibold mt-8 mb-3 text-center w-full md:text-left;
+    }
 
-  a {
-    @apply hover:underline;
-  }
+    a {
+        @apply hover:underline;
+    }
 
-  code {
-    @apply bg-sec-bg text-fg text-sm py-2 px-4 block max-w-[80%] min-w-fit w-fit rounded my-4 mx-auto border border-ter-fg/20 overflow-x-scroll text-center;
-  }
+    code {
+        @apply bg-sec-bg text-fg text-sm py-2 px-4 block max-w-[80%] min-w-fit w-fit rounded my-4 mx-auto border border-ter-fg/20 overflow-x-scroll text-center;
+    }
 
-  h3 {
-    @apply my-2 text-center w-full md:text-left;
-  }
+    h3 {
+        @apply my-2 text-center w-full md:text-left;
+    }
 
-  button {
-    @apply cursor-pointer;
-  }
+    button {
+        @apply cursor-pointer;
+    }
+
+    @keyframes scale-up {
+        0% {
+            transform: scale(1);
+        }
+        50% {
+            transform: scale(1.1);
+        }
+        100% {
+            transform: scale(1);
+        }
+    }
+
+    .animate-scale-up {
+        animation: scale-up 0.2s ease-out;
+    }
 }
