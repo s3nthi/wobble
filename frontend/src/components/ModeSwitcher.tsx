@@ -29,7 +29,7 @@ const getLetterClass = (state: LetterState) => {
         case "absent":
             return "bg-acc-grey text-white";
         default:
-            return "bg-bg border-cell-border border-2 text-fg";
+            return "border-cell-border border-2 text-fg";
     }
 };
 
@@ -73,7 +73,7 @@ export default function ModeSwitcher() {
         <>
             <div
                 id="mode-switcher"
-                className="my-8 mx-auto flex flex-col items-center justify-center gap-4 md:flex-row"
+                className="mb-10 mx-auto flex flex-col items-center justify-center gap-4 md:flex-row"
             >
                 <label className="cursor-pointer">
                     <input
@@ -103,7 +103,7 @@ export default function ModeSwitcher() {
                 </label>
             </div>
 
-            <div id="mode-content" className="my-8">
+            <div id="mode-content" className="my-10">
                 {mode === "play" && <PlayAgainstMode />}
                 {mode === "test" && <TestBotMode />}
             </div>
@@ -362,12 +362,12 @@ function PlayAgainstMode() {
                         </div>
                     )}
                     <div className="flex flex-col items-center gap-4">
-                        <h3 className="font-bold text-2xl text-center">You</h3>
                         {renderBoard(userBoard, currentRow)}
+                        <h3 className="font-bold text-2xl text-center">You</h3>
                     </div>
                     <div className="flex flex-col items-center gap-4">
-                        <h3 className="font-bold text-2xl text-center">Bot</h3>
                         {renderBoard(botBoard, undefined, true)}
+                        <h3 className="font-bold text-2xl text-center">Bot</h3>
                     </div>
                 </div>
             )}

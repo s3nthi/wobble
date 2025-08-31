@@ -1,12 +1,25 @@
 ---
 import "../styles/global.css";
 import MainLayout from "../layouts/MainLayout.astro";
+import WobbleText from "../components/WobbleText.astro";
 
 import ModeSwitcher from "../components/ModeSwitcher";
 ---
 
 <MainLayout title="Wobble">
-  <div class="my-8">
+  <section class="text-center w-full px-4 flex flex-col items-center rounded-lg my-4">
+    <h1 class="text-4xl font-bold my-2 text-sec-fg">Welcome to</h1>
+    <div class="text-4xl md:text-6xl my-6 drop-shadow-xl drop-shadow-acc-grey/60">
+      <WobbleText/>
+    </div>
+    <p class="text-lg my-2">
+      The bot that can solve <strong>Wordle</strong>&trade; (better than you can).
+    </p>
+  </section>
+
+  <hr class="text-cell-border my-10">
+
+  <div class="my-10 animate-fade-in">
     <ModeSwitcher client:visible/>
   </div>
 </MainLayout>
