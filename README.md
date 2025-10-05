@@ -1,5 +1,9 @@
 <div align="center">
-<h1>Wobble – RL Wordle™ Solver</h1>
+  <br/>
+  <img src="frontend/public/favicon.svg" width="128" />
+  <br/>
+  <br/>
+  <h1>Wobble – RL Wordle™ Solver</h1>
 </div>
 Wobble is a Reinforcement Learning project that trains an agent to play Wordle™. It includes:
 
