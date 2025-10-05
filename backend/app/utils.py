@@ -1,19 +1,16 @@
 import math, json
 from collections import Counter
 
-# === Feedback ===
 def feedback_counts(guess, secret):
     greens, yellows = 0, 0
     secret_chars = list(secret)
     used = [False]*5
 
-    # Greens
     for i, g in enumerate(guess):
         if g == secret[i]:
             greens += 1
             used[i] = True
 
-    # Yellows
     for i, g in enumerate(guess):
         if g != secret[i]:
             for j in range(5):
@@ -34,9 +31,7 @@ def update_constraints(constraints, guess, secret):
             constraints["grays"].add(g)
 
 
-# === Precompute heuristics ===
 def precompute(train_words):
-    # positional frequencies
     pos_freq = [{c:0 for c in 'abcdefghijklmnopqrstuvwxyz'} for _ in range(5)]
     for w in train_words:
         for i,ch in enumerate(w):

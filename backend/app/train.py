@@ -6,8 +6,8 @@ from collections import defaultdict
 from .env import WordleEnv
 from .strategies import pick_word, ACTIONS, init_strategies
 
-alpha, gamma = 0.02, 0.05
-epsilon = 0.3
+alpha, gamma = 0.1, 0.1
+epsilon = 0.05
 
 def train_model():
     BASE_DIR = os.path.dirname(__file__)
@@ -23,8 +23,8 @@ def train_model():
     Q = defaultdict(lambda: [0.0] * len(ACTIONS))
     env = WordleEnv(train_words, all_words)
 
-    episodes = 10000
-    print_every = 100
+    episodes = 200000
+    print_every = 500
     total_reward, wins = 0, 0
 
     for episode in range(1, episodes + 1):
@@ -67,7 +67,6 @@ def train_model():
             )
             total_reward, wins = 0, 0
 
-    # Save model
     models_dir = os.path.join(BASE_DIR, "models")
     os.makedirs(models_dir, exist_ok=True)
 

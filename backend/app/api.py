@@ -6,7 +6,7 @@ import pickle, json, random
 from .env import WordleEnv
 from .strategies import pick_word, ACTIONS, init_strategies
 
-# === Setup Paths ===
+
 BASE_DIR = os.path.dirname(__file__)
 DATA_DIR = os.path.join(BASE_DIR, "data")
 
@@ -21,7 +21,6 @@ MODEL_DIR = os.path.join(BASE_DIR, "models")
 with open(os.path.join(MODEL_DIR, "q_table.pkl"), "rb") as f:
     Q = pickle.load(f)
 
-# === FastAPI Setup ===
 app = FastAPI()
 games = {}
 
@@ -38,7 +37,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# === Schemas ===
 class StartRequest(BaseModel):
     secret: str | None = None
 
@@ -54,7 +52,6 @@ class GuessRequest(BaseModel):
     guess: str
 
 
-# === Endpoints ===
 @app.post("/start")
 def start_game(req: StartRequest):
     if req.secret is not None:
@@ -92,7 +89,7 @@ def user_step(req: StepRequest):
 
     if done:
         secret = env.secret
-        del games[req.game_id]  # terminate game
+        del games[req.game_id]
         return {
             "state": state,
             "reward": reward,
@@ -132,7 +129,7 @@ def bot_move(req: BotRequest):
 
     if done:
         secret = env.secret
-        del games[req.game_id]  # terminate game
+        del games[req.game_id]
         return {
             "guess": guess,
             "state": state,
@@ -166,7 +163,7 @@ def guess_word(req: GuessRequest):
 
     if correct:
         secret = env.secret
-        del games[req.game_id]  # terminate if guessed correctly
+        del games[req.game_id]
         return {
             "correct": True,
             "guess": req.guess,

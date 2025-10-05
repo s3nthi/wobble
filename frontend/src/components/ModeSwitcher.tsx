@@ -113,6 +113,7 @@ export default function ModeSwitcher() {
 
 function PlayAgainstMode() {
     const [gameId, setGameId] = useState<string | null>(null);
+    const [loading, setLoading] = useState(true);
     const [userBoard, setUserBoard] = useState<BoardRow[]>(
         Array(6)
             .fill(null)
@@ -129,10 +130,15 @@ function PlayAgainstMode() {
     const [toast, setToast] = useState<string | null>(null);
 
     const { scaleStates, triggerScale } = useScaleAnimation();
+    // @ts-ignore
     const API_URL = import.meta.env.PUBLIC_API_URL;
 
     useEffect(() => {
-        (async () => await startGame())();
+        (async () => {
+            setLoading(true);
+            await startGame();
+            setLoading(false);
+        })();
     }, []);
 
     useEffect(() => {
@@ -352,33 +358,41 @@ function PlayAgainstMode() {
 
     return (
         <div className="flex flex-col items-center gap-6 px-4 sm:px-0 relative">
-            {gameId && (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10 w-full max-w-4xl">
-                    {toast && (
-                        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                            <div className="bg-black/80 text-white px-4 py-2 rounded-lg shadow-lg text-lg">
-                                {toast}
+            {loading ? (
+                <div className="flex items-center justify-center h-40">
+                    <span className="text-lg text-fg animate-pulse">Loading...</span>
+                </div>
+            ) : (
+                <>
+                    {gameId && (
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10 w-full max-w-4xl">
+                            {toast && (
+                                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                                    <div className="bg-black/80 text-white px-4 py-2 rounded-lg shadow-lg text-lg">
+                                        {toast}
+                                    </div>
+                                </div>
+                            )}
+                            <div className="flex flex-col items-center gap-4">
+                                <h3 className="font-bold text-2xl text-center">You</h3>
+                                {renderBoard(userBoard, currentRow)}
+                            </div>
+                            <div className="flex flex-col items-center gap-4">
+                                <h3 className="font-bold text-2xl text-center">Bot</h3>
+                                {renderBoard(botBoard, undefined, true)}
                             </div>
                         </div>
                     )}
-                    <div className="flex flex-col items-center gap-4">
-                        <h3 className="font-bold text-2xl text-center">You</h3>
-                        {renderBoard(userBoard, currentRow)}
-                    </div>
-                    <div className="flex flex-col items-center gap-4">
-                        <h3 className="font-bold text-2xl text-center">Bot</h3>
-                        {renderBoard(botBoard, undefined, true)}
-                    </div>
-                </div>
-            )}
 
-            {isGameOver && (
-                <button
-                    onClick={handleRestart}
-                    className="mt-4 px-4 py-2 rounded bg-sec-bg hover:bg-ter-bg text-fg border-ter-fg/20 hover:border-fg/20 border"
-                >
-                    Restart
-                </button>
+                    {isGameOver && (
+                        <button
+                            onClick={handleRestart}
+                            className="mt-4 px-4 py-2 rounded bg-sec-bg hover:bg-ter-bg text-fg border-ter-fg/20 hover:border-fg/20 border"
+                        >
+                            Restart
+                        </button>
+                    )}
+                </>
             )}
         </div>
     );
@@ -396,9 +410,11 @@ function TestBotMode() {
     const [toast, setToast] = useState<string | null>(null);
     const [secretArr, setSecretArr] = useState<string[]>(Array(5).fill(""));
     const [started, setStarted] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const { scaleStates, triggerScale } = useScaleAnimation();
     const inputRefs = useRef<Array<HTMLInputElement | null>>([]);
+    // @ts-ignore
     const API_URL = import.meta.env.PUBLIC_API_URL;
 
     function showToast(msg: string) {
@@ -438,13 +454,17 @@ function TestBotMode() {
             return;
         }
 
+        setLoading(true);
         try {
             const res = await fetch(`${API_URL}/start`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ secret }),
             });
-            if (!res.ok) return showToast("Failed to start game");
+            if (!res.ok) {
+                setLoading(false);
+                return showToast("Failed to start game");
+            }
 
             const data = await res.json();
             setGameId(data.game_id);
@@ -457,8 +477,12 @@ function TestBotMode() {
             setIsGameOver(false);
             setStarted(true);
 
-            setTimeout(() => botGuessLoop(data.game_id, secret, 0), 500);
+            setTimeout(() => {
+                setLoading(false);
+                botGuessLoop(data.game_id, secret, 0);
+            }, 500);
         } catch (err) {
+            setLoading(false);
             console.error(err);
             showToast("Failed to start");
         }
@@ -564,65 +588,73 @@ function TestBotMode() {
                 </div>
             )}
 
-            {!started && (
-                <div className="flex flex-col items-center gap-4">
-                    <div className="flex gap-1">
-                        {Array.from({ length: 5 }).map((_, i) => (
-                            <input
-                                key={i}
-                                ref={(el) => {
-                                    inputRefs.current[i] = el;
-                                }}
-                                value={secretArr[i] || ""}
-                                onChange={(e) => {
-                                    handleLetterChange(e, i);
-                                    if (e.currentTarget.value)
-                                        triggerScale(`input-${i}`);
-                                }}
-                                onKeyDown={(e) => handleKeyDown(e, i)}
-                                maxLength={1}
-                                className={`caret-transparent w-12 h-12 text-center text-2xl font-bold uppercase tracking-widest focus:outline-none ${
-                                    scaleStates[`input-${i}`]
-                                        ? "animate-scale-up"
-                                        : ""
-                                }`}
-                                placeholder="_"
-                            />
-                        ))}
-                    </div>
-                    <button
-                        onClick={startGame}
-                        className="px-4 py-2 rounded bg-sec-bg hover:bg-ter-bg text-fg border-ter-fg/20 hover:border-fg/20 border"
-                    >
-                        Start
-                    </button>
+            {loading ? (
+                <div className="flex items-center justify-center h-40">
+                    <span className="text-lg text-fg animate-pulse">Loading...</span>
                 </div>
-            )}
+            ) : (
+                <>
+                    {!started && (
+                        <div className="flex flex-col items-center gap-4">
+                            <div className="flex gap-1">
+                                {Array.from({ length: 5 }).map((_, i) => (
+                                    <input
+                                        key={i}
+                                        ref={(el) => {
+                                            inputRefs.current[i] = el;
+                                        }}
+                                        value={secretArr[i] || ""}
+                                        onChange={(e) => {
+                                            handleLetterChange(e, i);
+                                            if (e.currentTarget.value)
+                                                triggerScale(`input-${i}`);
+                                        }}
+                                        onKeyDown={(e) => handleKeyDown(e, i)}
+                                        maxLength={1}
+                                        className={`caret-transparent w-12 h-12 text-center text-2xl font-bold uppercase tracking-widest focus:outline-none ${
+                                            scaleStates[`input-${i}`]
+                                                ? "animate-scale-up"
+                                                : ""
+                                        }`}
+                                        placeholder="_"
+                                    />
+                                ))}
+                            </div>
+                            <button
+                                onClick={startGame}
+                                className="px-4 py-2 rounded bg-sec-bg hover:bg-ter-bg text-fg border-ter-fg/20 hover:border-fg/20 border"
+                            >
+                                Start
+                            </button>
+                        </div>
+                    )}
 
-            {started && renderBoard()}
+                    {started && renderBoard()}
 
-            {isGameOver && (
-                <button
-                    onClick={() => {
-                        setStarted(false);
-                        setBoard(
-                            Array(6)
-                                .fill(null)
-                                .map(() => ({
-                                    word: "",
-                                    colors: Array(5).fill("empty"),
-                                }))
-                        );
-                        setGameId(null);
-                        setIsGameOver(false);
-                        setSecretArr(Array(5).fill(""));
-                        setMoveIndex(0);
-                        inputRefs.current[0]?.focus();
-                    }}
-                    className="mt-4 px-4 py-2 rounded bg-sec-bg hover:bg-ter-bg text-fg border-ter-fg/20 hover:border-fg/20 border"
-                >
-                    Restart
-                </button>
+                    {isGameOver && (
+                        <button
+                            onClick={() => {
+                                setStarted(false);
+                                setBoard(
+                                    Array(6)
+                                        .fill(null)
+                                        .map(() => ({
+                                            word: "",
+                                            colors: Array(5).fill("empty"),
+                                        }))
+                                );
+                                setGameId(null);
+                                setIsGameOver(false);
+                                setSecretArr(Array(5).fill(""));
+                                setMoveIndex(0);
+                                inputRefs.current[0]?.focus();
+                            }}
+                            className="mt-4 px-4 py-2 rounded bg-sec-bg hover:bg-ter-bg text-fg border-ter-fg/20 hover:border-fg/20 border"
+                        >
+                            Restart
+                        </button>
+                    )}
+                </>
             )}
         </div>
     );

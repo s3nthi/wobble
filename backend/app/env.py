@@ -15,15 +15,16 @@ class WordleEnv:
         return self.last_counts, self.constraints
 
     def step(self, guess):
+        import math
         self.turn += 1
-        g,y = feedback_counts(guess, self.secret)
-        reward = 5*g + 2*y
+        g, y = feedback_counts(guess, self.secret)
+        reward = 2 * g + y
         if guess == self.secret:
             self.done = True
-            reward += 25
+            reward += 100 - 15 * math.log2(self.turn)
         elif self.turn == 6:
             self.done = True
-            reward -= 15
+            reward -= 1000
         update_constraints(self.constraints, guess, self.secret)
-        self.last_counts = (g,y)
+        self.last_counts = (g, y)
         return (self.last_counts, self.constraints), reward, self.done, {}
