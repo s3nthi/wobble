@@ -21,7 +21,7 @@ class WordleEnv:
         reward = 2 * g + y
         if guess == self.secret:
             self.done = True
-            reward += 100 - 15 * math.log2(self.turn)
+            reward += 100 - 15 * math.log2(7 - self.turn)
         elif self.turn == 6:
             self.done = True
             reward -= 1000

@@ -22,7 +22,7 @@ import MainLayout from "../layouts/MainLayout.astro";
         <ul>
             <li>
                 <strong>State:</strong> After each guess, the environment provides
-                feedback — how many letters are correct and in the right position
+                feedback about how many letters are correct and in the right position
                 (greens), and how many letters are correct but misplaced (yellows).
             </li>
             <li>
@@ -33,6 +33,12 @@ import MainLayout from "../layouts/MainLayout.astro";
                 <strong>Reward:</strong> The agent receives positive points for getting
                 greens and yellows, a large bonus for solving the word, and a penalty
                 if it fails within 6 tries.
+
+                <code>
+                    if (guessed): reward += 100 - 15 * log2(7 - turn)
+                    <br/>
+                    else: reward -= 1000
+                </code>
             </li>
         </ul>
 
@@ -43,7 +49,7 @@ import MainLayout from "../layouts/MainLayout.astro";
 
         <code>
             Q[s][a] ← Q[s][a] + &alpha; * (reward + &gamma; * max(Q[s&rsquo;]) -
-            Q[s][a]))
+            Q[s][a])
         </code>
 
         <ul style="list-style-type: none; text-align: center;">
